@@ -10,7 +10,7 @@ def calculate_objective(x):
     return f_x
 
 def compute_gradient(x):
-    grad_x= (1/(2*len(b))) * (np.transpose(A) @ (A @ x - b))
+    grad_x= (1/(len(b))) * (np.transpose(A) @ (A @ x - b))
 
     return grad_x
 
@@ -27,6 +27,7 @@ def gradient_descent(max_iterations, step_size, x0):
         x_k = x_k - step_size * gradient
 
     print(f"Diverged at step {len(f_x)}")
+    print(f"x: {x_k}, f(x): {f_x[i]}")
     return np.array(f_x)
 
 def calculate_step(A):
@@ -52,15 +53,18 @@ def main():
     x0 = np.transpose(x0)
 
     fig, ax = plt.subplots()
-    for step in steps:
+    labels = ["0.1", "B", "L"]
+    for i in range(len(steps)):
         start_time = time.time()
-        f_x = gradient_descent(max_iterations, step, x0)
+        f_x = gradient_descent(max_iterations, steps[i], x0)
         end_time = time.time()
         times.append(end_time - start_time)
 
 
-        ax.plot([i for i in range(0, len(f_x))], f_x)
+        ax.plot([j for j in range(0, len(f_x))], f_x, label=labels[i])
 
+    ax.set_yscale('log')
+    plt.legend()
     plt.show()
 
     print("Time: ")

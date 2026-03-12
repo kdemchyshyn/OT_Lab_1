@@ -7,7 +7,7 @@ def calculate_objective(x, num):
     return g_x
 
 def compute_gradient(x, num):
-    grad_x = (x - np.log(num + x)) * (1 + 1/(num + x))
+    grad_x = (x - np.log(num + x)) * (1 - 1/(num + x))
     return grad_x
 
 def gradient_descent(max_iterations, x0, num):
@@ -48,9 +48,10 @@ def main():
     y_ln_2 = np.array([np.log(2 + x) for x in cords_x])
 
     fig, ax = plt.subplots()
-    ax.plot(cords_x, y_x)
-    ax.plot(cords_x, y_ln_1)
-    ax.plot(cords_x, y_ln_2)
+    ax.plot(cords_x, y_x, label="y = x")
+    ax.plot(cords_x, y_ln_1, label="y = ln(1 + x)")
+    ax.plot(cords_x, y_ln_2, label="y = ln(2 + x)")
+    plt.legend()
     plt.show()
 
     max_iterations = 100
@@ -59,15 +60,17 @@ def main():
     x0 = 2
 
     fig, ax = plt.subplots()
+    labels = ["l1", "l2"]
     for i in range(0, 2):
         start_time = time.time()
         f_x = gradient_descent(max_iterations, x0, i + 1)
         end_time = time.time()
         times.append(end_time - start_time)
 
-        ax.plot([i for i in range(0, len(f_x), 10)], f_x[::10])
-        ax.set_yscale('log')
+        ax.plot([i for i in range(0, len(f_x), 10)], f_x[::10], label=labels[i])
 
+    ax.set_yscale('log')
+    plt.legend()
     plt.show()
 
     print("Time: ")
